@@ -37,12 +37,10 @@ resource "opnsense_firewall_nat" "k8_port_forwarding" {
 
   destination = {
     net  = var.ip
-    port = "http"
   }
 
   target = {
     ip   = "wanip"
-    port = "http"
   }
 
   log         = true
