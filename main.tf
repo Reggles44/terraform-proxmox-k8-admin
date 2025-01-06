@@ -15,6 +15,7 @@ provider "opnsense" {
   uri        = "192.168.1.1"
   api_key    = var.opnsense_key
   api_secret = var.opnsense_secret
+  allow_insecure = true
 }
 
 provider "proxmox" {
