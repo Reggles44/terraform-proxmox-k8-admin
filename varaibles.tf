@@ -29,3 +29,9 @@ variable "ip" {
   type = string
 }
 
+variable "vmid" {
+  type = number
+}
+
+
+
