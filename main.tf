@@ -5,7 +5,7 @@ terraform {
       version = "3.0.1-rc6"
     }
     opnsense = {
-      version = "~> x.0"
+      version = "0.11.0"
       source  = "browningluke/opnsense"
     }
   }
