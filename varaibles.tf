@@ -1,17 +1,17 @@
-variable "pve_host" {
+variable "proxmox_host" {
   type = string
 }
 
-variable "pve_node" {
+variable "proxmox_node" {
   type = string
 }
 
-variable "pve_password" {
+variable "proxmox_password" {
   type      = string
   sensitive = true
 }
 
-variable "pve_user" {
+variable "proxmox_user" {
   type = string
 }
 
