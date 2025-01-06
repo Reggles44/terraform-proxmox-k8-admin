@@ -28,15 +28,15 @@ resource "opnsense_firewall_nat" "k8_port_forwarding" {
   enabled = true
 
   interface = "wan"
-  protocol  = "UDP"
+  protocol  = "TCP/UDP"
 
   source = {
     net = "wan"
   }
 
   destination = {
-    net  = var.ip_address
-    port = "2456"
+    net  = var.ip
+    port = "http"
   }
 
   target = {
