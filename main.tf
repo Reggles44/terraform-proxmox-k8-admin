@@ -108,8 +108,7 @@ resource "proxmox_vm_qemu" "k8-admin" {
 
   provisioner "remote-exec" {
     inline = [
-      "sleep 60",
-      "sudo systemctl enable --now kubelet",
+      "cloud-init status --wait"
     ]
   }
 }
