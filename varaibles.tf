@@ -25,3 +25,7 @@ variable "opnsense_secret" {
   sensitive = true
 }
 
+variable "ip" {
+  type = string
+}
+

@@ -12,8 +12,8 @@ terraform {
 }
 
 provider "opnsense" {
-  uri = "192.168.1.1"
-  api_key = var.opnsense_key
+  uri        = "192.168.1.1"
+  api_key    = var.opnsense_key
   api_secret = var.opnsense_secret
 }
 
@@ -40,7 +40,7 @@ resource "opnsense_firewall_nat" "k8_port_forwarding" {
   }
 
   target = {
-    ip = "wanip"
+    ip   = "wanip"
     port = "http"
   }
 
@@ -49,8 +49,8 @@ resource "opnsense_firewall_nat" "k8_port_forwarding" {
 }
 
 resource "proxmox_vm_qemu" "k8-admin" {
-  name = "k8-admin"
-  desc = "K8 Admin"
+  name             = "k8-admin"
+  desc             = "K8 Admin"
   count            = 1
   vmid             = 103
   clone            = "debian"
