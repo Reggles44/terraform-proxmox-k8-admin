@@ -25,15 +25,19 @@ variable "opnsense_secret" {
   sensitive = true
 }
 
+variable "vmid" {
+  type = number
+}
+
 variable "ip" {
   type = string
 }
 
-variable "subnet_id" {
-  type = number
+variable "subnet_ip" {
+  type = string
 }
 
-variable "vmid" {
-  type = number
+variable "subnet_desc" {
+  type = string
 }
 

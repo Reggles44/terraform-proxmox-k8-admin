@@ -31,12 +31,13 @@ provider "proxmox" {
 
 resource "macaddress" "k8_admin" {}
 
-data "opnsense_kea_subnet" "server_subnet" {
-  id = var.subnet_id
+resource "opnsense_kea_subnet" "k8_subnet" {
+  subnet = var.subnet_ip
+  description = var.subnet_desc
 }
 
 resource "opnsense_kea_reservation" "k8-admin-reservation" {
-  subnet_id = data.opnsense_kea_subnet.server_subnet.id
+  subnet_id = data.opnsense_kea_subnet.k8_subnet.id
 
   ip_address  = var.ip
   mac_address = macaddress.k8_admin.address
