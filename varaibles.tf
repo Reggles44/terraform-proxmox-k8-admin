@@ -33,11 +33,7 @@ variable "ip" {
   type = string
 }
 
-variable "subnet_ip" {
-  type = string
-}
-
-variable "subnet_desc" {
+variable "subnet_id" {
   type = string
 }
 
