@@ -4,10 +4,6 @@ terraform {
       source  = "telmate/proxmox"
       version = "3.0.1-rc6"
     }
-    opnsense = {
-      version = "0.11.0"
-      source  = "browningluke/opnsense"
-    }
     macaddress = {
       version = "0.3.2"
       source  = "ivoronin/macaddress"
@@ -27,7 +23,6 @@ resource "macaddress" "k8_admin" {}
 resource "proxmox_vm_qemu" "k8-admin" {
   depends_on = [
     macaddress.k8_admin,
-    opnsense_kea_reservation.k8-admin-reservation,
   ]
 
   name             = "k8-admin"
