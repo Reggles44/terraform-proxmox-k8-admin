@@ -15,13 +15,6 @@ terraform {
   }
 }
 
-provider "opnsense" {
-  uri            = "https://192.168.1.1"
-  api_key        = var.opnsense_key
-  api_secret     = var.opnsense_secret
-  allow_insecure = true
-}
-
 provider "proxmox" {
   pm_api_url          = "https://${var.proxmox_host}:8006/api2/json"
   pm_api_token_id     = var.proxmox_user
@@ -30,15 +23,6 @@ provider "proxmox" {
 }
 
 resource "macaddress" "k8_admin" {}
-
-resource "opnsense_kea_reservation" "k8-admin-reservation" {
-  subnet_id = var.subnet_id
-
-  ip_address  = var.ip
-  mac_address = macaddress.k8_admin.address
-
-  description = "k8 admin"
-}
 
 resource "proxmox_vm_qemu" "k8-admin" {
   depends_on = [
@@ -93,6 +77,7 @@ resource "proxmox_vm_qemu" "k8-admin" {
   os_type       = "cloud-init"
   cicustom      = "user=local:snippets/debian.yml"
   ipconfig0     = "ip=${var.ip}"
+  ipconfig1     = "ip=dhcp"
   agent_timeout = 120
 
   connection {
