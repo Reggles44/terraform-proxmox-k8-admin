@@ -8,13 +8,17 @@ terraform {
       version = "0.11.0"
       source  = "browningluke/opnsense"
     }
+    macaddress = {
+      version = "0.3.2"
+      source  = "ivoronin/macaddress"
+    }
   }
 }
 
 provider "opnsense" {
-  uri        = "https://192.168.1.1"
-  api_key    = var.opnsense_key
-  api_secret = var.opnsense_secret
+  uri            = "https://192.168.1.1"
+  api_key        = var.opnsense_key
+  api_secret     = var.opnsense_secret
   allow_insecure = true
 }
 
@@ -25,31 +29,23 @@ provider "proxmox" {
   pm_tls_insecure     = true
 }
 
-resource "opnsense_firewall_nat" "k8_port_forwarding" {
-  enabled = true
+resource "macaddress" "k8_admin" {}
 
-  interface = "wan"
-  protocol  = "TCP"
+resource "opnsense_kea_reservation" "k8-admin-reservation" {
+  subnet_id = resource.opnsense_kea_subnet.svr.id
 
-  source = {
-    net = "wan"
-  }
+  ip_address  = var.ip
+  mac_address = macaddress.k8_admin.address
 
-  destination = {
-    net  = var.ip
-    port = "http"
-  }
-
-  target = {
-    ip   = "wanip"
-    port = "http"
-  }
-
-  log         = true
-  description = "k8"
+  description = "k8 admin"
 }
 
 resource "proxmox_vm_qemu" "k8-admin" {
+  depends_on = [
+    macaddress.k8_admin,
+    opnsense_kea_reservation.k8-admin-reservation,
+  ]
+
   name             = "k8-admin"
   desc             = "K8 Admin"
   count            = 1
@@ -88,15 +84,15 @@ resource "proxmox_vm_qemu" "k8-admin" {
   }
 
   network {
-    id     = 1
-    bridge = "vmbr0"
-    model  = "virtio"
+    id      = 1
+    bridge  = "vmbr0"
+    model   = "virtio"
+    macaddr = macaddress.k8_admin.address
   }
 
   os_type       = "cloud-init"
   cicustom      = "user=local:snippets/debian.yml"
-  ipconfig0     = "ip=dhcp"
-  ipconfig1     = "ip=dhcp"
+  ipconfig0     = "ip=${var.ip}"
   agent_timeout = 120
 
   connection {
