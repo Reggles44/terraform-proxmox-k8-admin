@@ -29,9 +29,11 @@ variable "ip" {
   type = string
 }
 
-variable "vmid" {
+variable "subnet_id" {
   type = number
 }
 
-
+variable "vmid" {
+  type = number
+}
 
