@@ -32,7 +32,6 @@ resource "proxmox_vm_qemu" "k8_admin" {
 
   name             = "k8-admin"
   desc             = "K8 Admin"
-  count            = 1
   vmid             = var.vmid
   clone            = "debian"
   full_clone       = true
