@@ -89,17 +89,14 @@ resource "proxmox_vm_qemu" "k8-admin" {
   provisioner "remote-exec" {
     inline = [
       "cloud-init status --wait",
-      "sudo su",
-      "kubeadm init",
-      "kubeadm token create --print-join-command > /tmp/join.txt"
     ]
   }
 }
 
 resource "ssh_resource" "k8_init" {
-  depends_on = [ resource.proxmox_vm_qemu.k8_admin ]
+  depends_on = [ proxmox_vm_qemu.k8_admin ]
 
-  host = resource.proxmox_vm_qemu.k8_admin.ssh_host
+  host = proxmox_vm_qemu.k8_admin.ssh_host
   user = "debian"
   private_key = file("~/.ssh/id_rsa")
 
