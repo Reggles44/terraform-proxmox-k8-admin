@@ -8,6 +8,11 @@ terraform {
       version = "0.3.2"
       source  = "ivoronin/macaddress"
     }
+    ssh = {
+      version = "2.7.0"
+      source  = "loafoe/ssh"
+    }
+
   }
 }
 
@@ -79,7 +84,6 @@ resource "proxmox_vm_qemu" "k8-admin" {
     user        = "debian"
     private_key = file("~/.ssh/id_rsa")
     host        = self.ssh_host
-    port        = self.ssh_port
   }
 
   provisioner "remote-exec" {
@@ -92,15 +96,16 @@ resource "proxmox_vm_qemu" "k8-admin" {
   }
 }
 
-data "remote_file" "k8_join_file" {
+resource "ssh_resource" "k8_init" {
   depends_on = [ resource.proxmox_vm_qemu.k8_admin ]
 
-  conn {
-    host = resource.proxmox_vm_qemu.k8_admin.ssh_host
-    user = "debian"
-    private_key = file("~/.ssh/id_rsa")
-  }
+  host = resource.proxmox_vm_qemu.k8_admin.ssh_host
+  user = "debian"
+  private_key = file("~/.ssh/id_rsa")
 
-  path = "/tmp/join.txt"
+  commands = [
+    "kubeadm init",
+    "kubeadm token create --print-join-command"
+  ]
 }
 
