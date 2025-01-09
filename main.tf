@@ -66,12 +66,13 @@ resource "proxmox_vm_qemu" "k8_admin" {
     bridge  = "vmbr0"
     model   = "virtio"
     macaddr = macaddress.k8_admin_mac_address.address
+    tags    = 8
   }
 
   os_type       = "cloud-init"
   cicustom      = "user=local:snippets/debian.yml"
   ipconfig0     = "ip=dhcp"
-  agent_timeout = 120
+  agent_timeout = 300
 
   connection {
     type        = "ssh"
