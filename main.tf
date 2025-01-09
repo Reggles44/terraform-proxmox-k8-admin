@@ -71,8 +71,7 @@ resource "proxmox_vm_qemu" "k8-admin" {
 
   os_type       = "cloud-init"
   cicustom      = "user=local:snippets/debian.yml"
-  ipconfig0     = "ip=${var.ip_address},gw=${var.gateway}"
-  ipconfig1     = "ip=dhcp"
+  ipconfig0     = "ip=dhcp"
   agent_timeout = 120
 
   connection {
@@ -85,8 +84,23 @@ resource "proxmox_vm_qemu" "k8-admin" {
 
   provisioner "remote-exec" {
     inline = [
-      "cloud-init status --wait"
+      "cloud-init status --wait",
+      "sudo su",
+      "kubeadm init",
+      "kubeadm token create --print-join-command > /tmp/join.txt"
     ]
   }
+}
+
+data "remote_file" "k8_join_file" {
+  depends_on = [ resource.proxmox_vm_qemu.k8_admin ]
+
+  conn {
+    host = resource.proxmox_vm_qemu.k8_admin.ssh_host
+    user = "debian"
+    private_key = file("~/.ssh/id_rsa")
+  }
+
+  path = "/tmp/join.txt"
 }
 
