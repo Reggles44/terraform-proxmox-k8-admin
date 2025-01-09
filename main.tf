@@ -23,9 +23,9 @@ provider "proxmox" {
   pm_tls_insecure     = true
 }
 
-resource "macaddress" "k8_admin" {}
+resource "macaddress" "k8_admin_mac_address" {}
 
-resource "proxmox_vm_qemu" "k8-admin" {
+resource "proxmox_vm_qemu" "k8_admin" {
   depends_on = [
     macaddress.k8_admin,
   ]
@@ -71,7 +71,7 @@ resource "proxmox_vm_qemu" "k8-admin" {
     id      = 1
     bridge  = "vmbr0"
     model   = "virtio"
-    macaddr = macaddress.k8_admin.address
+    macaddr = macaddress.k8_admin_mac_address.address
   }
 
   os_type       = "cloud-init"
