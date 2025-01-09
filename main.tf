@@ -27,7 +27,7 @@ resource "macaddress" "k8_admin_mac_address" {}
 
 resource "proxmox_vm_qemu" "k8_admin" {
   depends_on = [
-    macaddress.k8_admin,
+    macaddress.k8_admin_mac_address,
   ]
 
   name             = "k8-admin"
