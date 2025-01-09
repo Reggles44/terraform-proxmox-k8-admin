@@ -8,11 +8,6 @@ terraform {
       version = "0.3.2"
       source  = "ivoronin/macaddress"
     }
-    ssh = {
-      version = "2.7.0"
-      source  = "loafoe/ssh"
-    }
-
   }
 }
 
@@ -77,19 +72,5 @@ resource "proxmox_vm_qemu" "k8_admin" {
   cicustom      = "user=local:snippets/debian.yml"
   ipconfig0     = "ip=dhcp"
   agent_timeout = 120
-}
-
-resource "ssh_resource" "k8_init" {
-  depends_on = [proxmox_vm_qemu.k8_admin]
-
-  host        = proxmox_vm_qemu.k8_admin.ssh_host
-  user        = "debian"
-  private_key = file("~/.ssh/id_rsa")
-
-  commands = [
-    "cloud-init status --wait",
-    "kubeadm init",
-    "kubeadm token create --print-join-command"
-  ]
 }
 
