@@ -78,15 +78,16 @@ resource "proxmox_vm_qemu" "k8_admin" {
   ipconfig0     = "ip=dhcp"
   agent_timeout = 120
 
+  connection {
+    type        = "ssh"
+    user        = "debian"
+    private_key = file("~/.ssh/id_rsa")
+    host        = self.ssh_host
+    port        = self.ssh_port
+  }
+
 
   provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = "debian"
-      private_key = file("~/.ssh/id_rsa")
-      host        = self.ssh_host
-    }
-
     inline = [
       "cloud-init status --wait",
     ]
