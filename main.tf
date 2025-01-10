@@ -66,7 +66,7 @@ resource "proxmox_vm_qemu" "k8_admin" {
     bridge  = "vmbr0"
     model   = "virtio"
     macaddr = macaddress.k8_admin_mac_address.address
-    tag     = 8
+    tag     = var.vlan_tag
   }
 
   os_type       = "cloud-init"

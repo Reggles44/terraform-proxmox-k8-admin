@@ -19,6 +19,10 @@ variable "vmid" {
   type = number
 }
 
+variable "vlan_tag" {
+  type = number
+}
+
 variable "ip_address" {
   type = string
 }
