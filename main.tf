@@ -62,7 +62,7 @@ resource "proxmox_vm_qemu" "k8_admin" {
   }
 
   network {
-    id      = 1
+    id      = 0
     bridge  = "vmbr0"
     model   = "virtio"
     macaddr = macaddress.k8_admin_mac_address.address
